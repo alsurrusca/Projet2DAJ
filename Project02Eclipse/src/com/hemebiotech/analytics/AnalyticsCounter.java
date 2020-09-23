@@ -1,7 +1,11 @@
 package com.hemebiotech.analytics;
 
-import java.io.*;
-import java.util.List;
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.*;
+import java.util.ArrayList;
+
+
 
 
 public class AnalyticsCounter {
@@ -9,49 +13,61 @@ public class AnalyticsCounter {
 	private static int rashCount = 0;        // initialize to 0
 	private static int pupilCount = 0;        // initialize to 0
 
-	private List<String> result;
+	private ArrayList<String> result;
 
-	public void start() {
+	public void start() throws IOException {
 
-		this.getSymptoms(); //appeler les symptomes
+		this.GetSymptoms(); //appeler les symptomes
 		this.countSymptoms(); // Les compter
-		this.orderSymptoms(); // Mettre en ordre alphabétique
-		this.saveSymptoms(); // Sauvegarder dans un fichier
+		//this.orderSymptoms(); // Mettre en ordre alphabétique
+		//this.saveSymptoms(); // Sauvegarder dans un fichier
 	}
 
 
-	private void getSymptoms() {
+	private ArrayList<String> GetSymptoms() {
 
-		ReadSymptomDataFromFile readSymptomDataFromFile = new ReadSymptomDataFromFile("symptoms.txt");
-		result = readSymptomDataFromFile.GetSymptoms();
+		ReadSymptomDataFromFile readSymptomDataFromFile = new ReadSymptomDataFromFile("E:\\Etude\\Java\\Formation Java\\Projet 2\\Project_DA_Java_EN_Come_to_the_Rescue_of_a_Java_Application-master\\Project02Eclipse\\symptoms.txt");
+		result = (ArrayList<String>) readSymptomDataFromFile.GetSymptoms();
+		return result;
 
 	}
 
 
-	private void countSymptoms() {
+	private void countSymptoms()  {
 
 		// compte les symptomes de result
-	}
 
-	private void orderSymptoms() {
+		ArrayList<String> liste = GetSymptoms();
 
-		// Mettre en ordre alphabétique les symptomes.
-	}
+		ArrayList<String> L1 = new ArrayList<>();
+		L1 = liste;
+			for(String str:liste);
+			for(String o:L1);
+			System.out.println(L1.size());
 
-	private void saveSymptoms() {
+			ArrayList<String> L2 = new ArrayList<>();
+		L2 = liste;
+			for (String str : liste);
+			for(String o:L2);
+			System.out.println(L2.size());
+			System.out.println(L2.get(5));
 
-		// next generate output
-		try {
-			FileWriter writer = new FileWriter("result.out");
-			writer.write("headache: " + headacheCount + "\n");
-			writer.write("rash: " + rashCount + "\n");
-			writer.write("dialated pupils: " + pupilCount + "\n");
-			writer.close();
 
-		} catch (IOException e) {
+			ArrayList<String> L3 = new ArrayList<String>();
+			for (int i=0; i< L1.size(); i++){
+				if(L1.get(i).equals(L2.get(i)))
+					L3.add("1");
+				else
+					L3.add("O");
+			}
 
-			System.err.println("Impossible de lire le contenu du fichier");
-		}
-	}
-}
+			System.out.println(L1.get(1));
+			System.out.println(L2.get(1));
+			System.out.println("L3 = " +L3);
+
+
+
+	 } }
+
+
 

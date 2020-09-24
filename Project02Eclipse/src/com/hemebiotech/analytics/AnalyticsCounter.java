@@ -1,11 +1,9 @@
 package com.hemebiotech.analytics;
 
-import java.io.IOException;
-import java.lang.reflect.Array;
+import java.io.*;
 import java.util.*;
-import java.util.ArrayList;
-
-
+import java.util.HashMap;
+import java.util.List;
 
 
 public class AnalyticsCounter {
@@ -13,9 +11,10 @@ public class AnalyticsCounter {
 	private static int rashCount = 0;        // initialize to 0
 	private static int pupilCount = 0;        // initialize to 0
 
-	private ArrayList<String> result;
+	private List<String> result;
+	private Object tableMotCle;
 
-	public void start() throws IOException {
+	public void start() {
 
 		this.GetSymptoms(); //appeler les symptomes
 		this.countSymptoms(); // Les compter
@@ -24,50 +23,76 @@ public class AnalyticsCounter {
 	}
 
 
-	private ArrayList<String> GetSymptoms() {
+	private void GetSymptoms() {
 
 		ReadSymptomDataFromFile readSymptomDataFromFile = new ReadSymptomDataFromFile("E:\\Etude\\Java\\Formation Java\\Projet 2\\Project_DA_Java_EN_Come_to_the_Rescue_of_a_Java_Application-master\\Project02Eclipse\\symptoms.txt");
-		result = (ArrayList<String>) readSymptomDataFromFile.GetSymptoms();
-		return result;
+		result = readSymptomDataFromFile.GetSymptoms();
+		//System.out.println(result);
+		return;
 
 	}
 
 
-	private void countSymptoms()  {
+	private void countSymptoms() {
 
 		// compte les symptomes de result
 
-		ArrayList<String> liste = GetSymptoms();
-
-		ArrayList<String> L1 = new ArrayList<>();
-		L1 = liste;
-			for(String str:liste);
-			for(String o:L1);
-			System.out.println(L1.size());
-
-			ArrayList<String> L2 = new ArrayList<>();
-		L2 = liste;
-			for (String str : liste);
-			for(String o:L2);
-			System.out.println(L2.size());
-			System.out.println(L2.get(5));
+		String fichier = "E:\\Etude\\Java\\Formation Java\\Projet 2\\Project_DA_Java_EN_Come_to_the_Rescue_of_a_Java_Application-master\\Project02Eclipse\\symptoms.txt";
+		Map<String, Integer> symptoms = new HashMap<>();
+		String ligne;
 
 
-			ArrayList<String> L3 = new ArrayList<String>();
-			for (int i=0; i< L1.size(); i++){
-				if(L1.get(i).equals(L2.get(i)))
-					L3.add("1");
-				else
-					L3.add("O");
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(fichier));
+
+			while ((ligne = br.readLine()) != null) {
+				ligne = ligne.toLowerCase();
+				StringTokenizer st = new StringTokenizer(ligne);
+				while (st.hasMoreTokens()) {
+					String str = st.nextToken();
+					if (symptoms.containsKey(str)) {
+						symptoms.put(str, (symptoms.get(str) + 1));
+					} else {
+						symptoms.put(str, 1);
+					}
+
+
+				}
 			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
 
-			System.out.println(L1.get(1));
-			System.out.println(L2.get(1));
-			System.out.println("L3 = " +L3);
+		System.out.println(symptoms.toString());
+		return;
+	}
 
 
+	/*private void orderSymptoms() throws NullPointerException {
 
-	 } }
 
+		Collections.sort(countSymptoms());
+		System.out.println(tableMotCle);
+
+	}
+
+	/*private void saveSymptoms() {
+
+		// next generate output
+		try {
+			FileWriter writer = new FileWriter("result.out");
+			writer.write("headache: " + headacheCount + "\n");
+			writer.write("rash: " + rashCount + "\n");
+			writer.write("dilated pupils: " + pupilCount + "\n");
+			writer.close();
+
+		} catch (IOException e) {
+
+			System.err.println("Impossible de lire le contenu du fichier");
+		}
+
+	}*/
+}
 
 

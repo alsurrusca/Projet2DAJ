@@ -1,9 +1,12 @@
 package com.hemebiotech.analytics;
 
+import com.sun.source.tree.Tree;
+
 import java.io.*;
 import java.util.*;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class AnalyticsCounter {
@@ -11,24 +14,27 @@ public class AnalyticsCounter {
 	private static int rashCount = 0;        // initialize to 0
 	private static int pupilCount = 0;        // initialize to 0
 
-	private List<String> result;
-	private Object tableMotCle;
+	private List<String> ListSymptoms;
+	private Map<String, Integer> ListSymptomsCount = new HashMap<String, Integer>();
+	private Map<String, Integer> ListOrderSymptoms;
+
+
 
 	public void start() {
 
-		this.GetSymptoms(); //appeler les symptomes
+		this.getSymptoms(); //appeler les symptomes
 		this.countSymptoms(); // Les compter
-		//this.orderSymptoms(); // Mettre en ordre alphabétique
-		//this.saveSymptoms(); // Sauvegarder dans un fichier
+		this.orderSymptoms(); // Mettre en ordre alphabétique
+		this.saveSymptoms(); // Sauvegarder dans un fichier
 	}
 
 
-	private void GetSymptoms() {
+	private void getSymptoms() {
 
 		ReadSymptomDataFromFile readSymptomDataFromFile = new ReadSymptomDataFromFile("E:\\Etude\\Java\\Formation Java\\Projet 2\\Project_DA_Java_EN_Come_to_the_Rescue_of_a_Java_Application-master\\Project02Eclipse\\symptoms.txt");
-		result = readSymptomDataFromFile.GetSymptoms();
+		ListSymptoms = readSymptomDataFromFile.getSymptoms();
 		//System.out.println(result);
-		return;
+
 
 	}
 
@@ -37,47 +43,52 @@ public class AnalyticsCounter {
 
 		// compte les symptomes de result
 
-		String fichier = "E:\\Etude\\Java\\Formation Java\\Projet 2\\Project_DA_Java_EN_Come_to_the_Rescue_of_a_Java_Application-master\\Project02Eclipse\\symptoms.txt";
-		Map<String, Integer> symptoms = new HashMap<>();
-		String ligne;
+		for(String symptom : ListSymptoms) {
 
-
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(fichier));
-
-			while ((ligne = br.readLine()) != null) {
-				ligne = ligne.toLowerCase();
-				StringTokenizer st = new StringTokenizer(ligne);
-				while (st.hasMoreTokens()) {
-					String str = st.nextToken();
-					if (symptoms.containsKey(str)) {
-						symptoms.put(str, (symptoms.get(str) + 1));
-					} else {
-						symptoms.put(str, 1);
-					}
-
-
-				}
-			}
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
+		if (ListSymptomsCount.containsKey(symptom)) { // On teste et utilise la variable
+			ListSymptomsCount.put(symptom, (ListSymptomsCount.get(symptom) + 1)); // Si le mot y est, ajouter +1
+		}
+			else {
+				ListSymptomsCount.put(symptom, 1); // Sinon le mettre à 1
 		}
 
-		System.out.println(symptoms.toString());
-		return;
-	}
+		}
 
 
-	/*private void orderSymptoms() throws NullPointerException {
+		//System.out.println(ListSymptomsCount);
 
 
-		Collections.sort(countSymptoms());
-		System.out.println(tableMotCle);
 
 	}
 
-	/*private void saveSymptoms() {
+
+
+
+	private  void orderSymptoms()  {
+
+
+
+
+
+		ListOrderSymptoms = ListSymptomsCount.entrySet()
+				.stream()
+				.sorted(Map.Entry.comparingByKey())
+				.collect(Collectors.toMap(
+						Map.Entry :: getKey,
+						Map.Entry :: getValue,
+						(oldValue, newValue) -> oldValue, LinkedHashMap::new
+				));
+
+
+
+
+	}
+
+
+
+	private void saveSymptoms() {
+
+		System.out.println(ListOrderSymptoms);
 
 		// next generate output
 		try {
@@ -92,7 +103,7 @@ public class AnalyticsCounter {
 			System.err.println("Impossible de lire le contenu du fichier");
 		}
 
-	}*/
-}
+	}}
+
 
 

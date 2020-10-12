@@ -1,6 +1,6 @@
 package com.hemebiotech.analytics;
 
-import com.sun.source.tree.Tree;
+
 
 import java.io.*;
 import java.util.*;
@@ -16,11 +16,10 @@ public class AnalyticsCounter {
 	private List<String> listSymptoms;
 	private Map<String, Integer> listSymptomsCount = new HashMap<String, Integer>();
 	private Map<String, Integer> listOrderSymptoms;
-	private Map<String, Integer> listFinalSymptoms;
 
 
 
-	public void start() {
+	public void start() throws IOException {
 
 		this.getSymptoms(); //appeler les symptomes
 		this.countSymptoms(); // Les compter
@@ -95,14 +94,28 @@ public class AnalyticsCounter {
 
 		FileWriter writer = new FileWriter("result.out");
 
-				for( String listFinalSymptoms : listOrderSymptoms) {
 
-					if (listOrderSymptoms.containsKey(listFinalSymptoms)) { // On vérifie si la clé est dans le tableau
-				writer.write(listOrderSymptoms.put(listFinalSymptoms ,(listOrderSymptoms.get(listFinalSymptoms)))); // Si le mot est présent, ajouter +1
+		for (Map.Entry<String, Integer> listFinalSymptoms : listOrderSymptoms.entrySet()) {
+			String key = listFinalSymptoms.getKey();
+			Integer value = listFinalSymptoms.getValue();
+			System.out.println(listFinalSymptoms);
+			writer.write(key + " = " + value + "\n");
+		}
 
-			} else {
-				writer.write(listOrderSymptoms.put(listFinalSymptoms, 1));
-			}
+
+		writer.close();
+
+
+
+
+
+					//écrire le hashmap avec la liste des symptoms + compteur dans un fichier de sortie
+					// Pour chacune des lignes, je récupère le symptomes + compteurs
+					//j'écris dans le chemin de sortie
+
+
+
+				}
 
 		/* next generate output
 		try {
@@ -119,7 +132,7 @@ public class AnalyticsCounter {
 		}*/
 
 
-	}}
+	}
 
 
 

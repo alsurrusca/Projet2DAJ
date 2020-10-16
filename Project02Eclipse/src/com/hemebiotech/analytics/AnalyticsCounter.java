@@ -1,17 +1,25 @@
 package com.hemebiotech.analytics;
 
+
+
 import java.io.*;
+import java.util.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class AnalyticsCounter {
-	private static int headacheCount = 0;    // initialize to 0
-	private static int rashCount = 0;        // initialize to 0
-	private static int pupilCount = 0;        // initialize to 0
 
-	private List<String> result;
 
-	public void start() {
+	private List<String> listSymptoms;
+	private Map<String, Integer> listSymptomsCount = new HashMap<String, Integer>();
+	private Map<String, Integer> listOrderSymptoms;
+
+
+
+	public void start()  {
 
 		this.getSymptoms(); //appeler les symptomes
 		this.countSymptoms(); // Les compter
@@ -22,8 +30,10 @@ public class AnalyticsCounter {
 
 	private void getSymptoms() {
 
-		ReadSymptomDataFromFile readSymptomDataFromFile = new ReadSymptomDataFromFile("symptoms.txt");
-		result = readSymptomDataFromFile.GetSymptoms();
+		ReadSymptomDataFromFile readSymptomDataFromFile = new ReadSymptomDataFromFile("E:\\Etude\\Java\\Formation Java\\Projet 2\\Project_DA_Java_EN_Come_to_the_Rescue_of_a_Java_Application-master\\Project02Eclipse\\symptoms.txt");
+		listSymptoms = readSymptomDataFromFile.getSymptoms();
+
+
 
 	}
 
@@ -31,27 +41,61 @@ public class AnalyticsCounter {
 	private void countSymptoms() {
 
 		// compte les symptomes de result
+
+
+		for(String symptom : listSymptoms) {
+
+		if (listSymptomsCount.containsKey(symptom)) { // On vérifie si la clé est dans le tableau
+			listSymptomsCount.put(symptom, (listSymptomsCount.get(symptom) + 1)); // Si le mot est présent, ajouter +1
+		}
+			else {
+				listSymptomsCount.put(symptom, 1); // Sinon on l'initialise à 1
+		}
+
+		}
+
+
+		//System.out.println(ListSymptomsCount);
+
+
+
 	}
 
-	private void orderSymptoms() {
 
-		// Mettre en ordre alphabétique les symptomes.
-	}
+
+
+	public void orderSymptoms()  {
+
+		listOrderSymptoms = listSymptomsCount.entrySet()
+				.stream()
+				.sorted(Map.Entry.comparingByKey())
+				.collect(Collectors.toMap(
+						Map.Entry :: getKey,
+						Map.Entry :: getValue,
+						(oldValue, newValue) -> oldValue, LinkedHashMap::new
+
+
+				));
+
+		}
+
+
+
+
+
 
 	private void saveSymptoms() {
 
-		// next generate output
-		try {
-			FileWriter writer = new FileWriter("result.out");
-			writer.write("headache: " + headacheCount + "\n");
-			writer.write("rash: " + rashCount + "\n");
-			writer.write("dialated pupils: " + pupilCount + "\n");
-			writer.close();
+		// Call WriteSymptomsFromData
 
-		} catch (IOException e) {
+			WriteSymptomsFromData writeSymptomsFromData = new WriteSymptomsFromData();
+			writeSymptomsFromData.saveSymptoms(listOrderSymptoms);
 
-			System.err.println("Impossible de lire le contenu du fichier");
-		}
+
 	}
-}
+
+
+	}
+
+
 

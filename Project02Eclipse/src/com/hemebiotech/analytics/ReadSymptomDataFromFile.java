@@ -2,6 +2,7 @@ package com.hemebiotech.analytics;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  *
  */
 public class ReadSymptomDataFromFile implements ISymptomReader {
-	
+
 		private final String filepath;
 
 
@@ -25,7 +26,7 @@ public class ReadSymptomDataFromFile implements ISymptomReader {
 		}
 
 		@Override
-		public List<String> GetSymptoms () {
+		public List<String> getSymptoms () {
 			ArrayList<String> result = new ArrayList<>();
 
 			if (filepath != null) {
@@ -46,4 +47,7 @@ public class ReadSymptomDataFromFile implements ISymptomReader {
 			return result;
 		}
 
+
+
 	}
+

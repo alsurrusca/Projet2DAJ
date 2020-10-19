@@ -1,13 +1,18 @@
 package com.hemebiotech.analytics;
 
-
-
-import java.io.*;
 import java.util.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+/**
+ * Read, count and make symptoms in order.
+ * @author Alissia Surrusca
+ *
+ *
+ */
+
+
 
 
 public class AnalyticsCounter {
@@ -18,17 +23,20 @@ public class AnalyticsCounter {
 	private Map<String, Integer> listOrderSymptoms;
 
 
-
 	public void start()  {
 
-		this.getSymptoms(); //appeler les symptomes
-		this.countSymptoms(); // Les compter
-		this.orderSymptoms(); // Mettre en ordre alphabétique
-		this.saveSymptoms(); // Sauvegarder dans un fichier
+		this.getSymptoms();
+		this.countSymptoms();
+		this.orderSymptoms();
+		this.saveSymptoms();
 	}
 
 
 	private void getSymptoms() {
+
+		/**
+		 * @see ReadSymptomDataFromFile
+		 */
 
 		ReadSymptomDataFromFile readSymptomDataFromFile = new ReadSymptomDataFromFile("E:\\Etude\\Java\\Formation Java\\Projet 2\\Project_DA_Java_EN_Come_to_the_Rescue_of_a_Java_Application-master\\Project02Eclipse\\symptoms.txt");
 		listSymptoms = readSymptomDataFromFile.getSymptoms();
@@ -40,23 +48,23 @@ public class AnalyticsCounter {
 
 	private void countSymptoms() {
 
-		// compte les symptomes de result
-
+		/**
+		 * @param listSymtoms
+		 * @return list which count all symptom's occurrences
+		 *
+		 */
 
 		for(String symptom : listSymptoms) {
 
-		if (listSymptomsCount.containsKey(symptom)) { // On vérifie si la clé est dans le tableau
-			listSymptomsCount.put(symptom, (listSymptomsCount.get(symptom) + 1)); // Si le mot est présent, ajouter +1
+		if (listSymptomsCount.containsKey(symptom)) { //check if key is on the Map
+			listSymptomsCount.put(symptom, (listSymptomsCount.get(symptom) + 1)); // Key is ok, we count +1
 		}
 			else {
-				listSymptomsCount.put(symptom, 1); // Sinon on l'initialise à 1
+				listSymptomsCount.put(symptom, 1); //Key isn't ok, symptom = 1
+			}
+
+
 		}
-
-		}
-
-
-		//System.out.println(ListSymptomsCount);
-
 
 
 	}
@@ -66,6 +74,12 @@ public class AnalyticsCounter {
 
 	public void orderSymptoms()  {
 
+		/**
+		 * Create a set of the same elements contained in the hash map
+		 * Order by key
+		 * @return LinkedHashMap
+		 *
+		 */
 		listOrderSymptoms = listSymptomsCount.entrySet()
 				.stream()
 				.sorted(Map.Entry.comparingByKey())
@@ -77,7 +91,7 @@ public class AnalyticsCounter {
 
 				));
 
-		}
+	}
 
 
 
@@ -86,7 +100,16 @@ public class AnalyticsCounter {
 
 	private void saveSymptoms() {
 
-		// Call WriteSymptomsFromData
+		/**
+		 *
+		 * Call WriteSymptomsFromData
+		 *
+		 * @see WriteSymptomsFromData
+		 *
+		 * @return void
+		 *
+		 */
+
 
 			WriteSymptomsFromData writeSymptomsFromData = new WriteSymptomsFromData();
 			writeSymptomsFromData.saveSymptoms(listOrderSymptoms);

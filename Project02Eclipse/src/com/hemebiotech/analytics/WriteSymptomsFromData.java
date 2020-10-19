@@ -4,8 +4,21 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
 
+/**
+ * Just to save the list of Symptoms, count and oder, in the external file
+ */
+
+
 public class WriteSymptomsFromData  implements ISymptomWriter {
 
+    /**
+     *
+     * @param listOrderSymptoms : Hashmap with all informations
+     * Take all listFinalSymotms's key and value, print in new file, line per line
+     *
+     * @throws IOException
+     *              if file can't be read
+     */
 
 
     @Override
